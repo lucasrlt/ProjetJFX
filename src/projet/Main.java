@@ -5,6 +5,9 @@
  */
 package projet;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.*;
+import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -17,6 +20,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import java.io.Console;
+import java.util.Observable;
+import java.util.Observer;
 import projet.modele.CaseSymbole;
 import projet.modele.Symbole;
 
@@ -25,23 +31,35 @@ import projet.modele.Symbole;
  * @author p1710505
  */
 public class Main extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) {
-        
-        int dimW = 800;
-        int dimH = 800;
-        int colonne = 0;
-        int ligne = 0;
-
 
         BorderPane border = new BorderPane();
         GridPane gPane = new GridPane();
+
         Modele modele = new Modele();
         Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
+        /*
+         * Text affichage = new Text("Grille Drag&Drop");
+         * affichage.setFont(Font.font("Verdana", 30)); affichage.setFill(Color.RED);
+         * border.setTop(affichage); TODO Modifier pour avoir les règles
+         */
+
+        modele.addObserver(new Observer() {
+
+            @Override
+            public void update(Observable o, Object arg) {
+                // TODO
+            }
+        });
+
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
                 Group root = new Group();
+
+                final int clicPosY = y;
+                final int clicPosX = x;
 
                 Rectangle r = new Rectangle(x, y, 100, 100);
                 r.setFill(Color.WHITE);
@@ -64,6 +82,31 @@ public class Main extends Application {
 
                 }
 
+                root.setOnDragDetected(new EventHandler<MouseEvent>() { // Au premier clic
+                    public void handle(MouseEvent event) {
+
+                        Dragboard db = root.startDragAndDrop(TransferMode.ANY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putString("");
+                        db.setContent(content);
+                        event.consume();
+                        modele.enfoncerClicGrille(clicPosY, clicPosX);
+                    }
+                });
+
+                root.setOnDragEntered(new EventHandler<DragEvent>() { // Quand le clic est maintenu
+                    public void handle(DragEvent event) {
+
+                        modele.parcoursGrille(clicPosY, clicPosX);
+                        event.consume();
+                    }
+                });
+
+                root.setOnDragDone(new EventHandler<DragEvent>() { // Clic relaché
+                    public void handle(DragEvent event) {
+                        modele.relacherClicGrille(clicPosY, clicPosX);
+                    }
+                });
 
                 gPane.add(root, x, y);
             }
