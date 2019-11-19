@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projet;
 
-/**
- *
- * @author p1710505
- */
-public class Ligne extends Case {
-    
+public enum Ligne {
+    HORIZONTAL,
+    VERTICALE,
+    BAS_DROITE,
+    BAS_GAUCHE,
+    HAUT_GAUCHE,
+    HAUT_DROITE
 }

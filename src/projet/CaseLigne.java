@@ -9,6 +9,11 @@ package projet;
  *
  * @author p1710505
  */
-public class Chemin {
-    
+public class CaseLigne extends Case {
+    Ligne ligne;
+
+    CaseLigne(Position _position, Ligne _ligne) {
+        super(_position, 'L');
+        this.ligne = _ligne;
+    }
 }

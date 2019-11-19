@@ -11,5 +11,15 @@ package projet;
  */
 public class Case {
     public Position position;
-    private char caractere;
+    public char caractere;
+
+    public Case(Position _position) {
+        this.position = position;
+        this.caractere = 'V';
+    }
+
+    public Case(Position position, char _caractere) {
+        this.position = position;
+        this.caractere = _caractere;
+    }
 }

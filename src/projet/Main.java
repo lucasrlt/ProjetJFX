@@ -22,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.Console;
+
 /**
  *
  * @author p1710505
@@ -40,20 +42,29 @@ public class Main extends Application {
         GridPane gPane = new GridPane();
         Group root = new Group();
         Scene scene = new Scene(root,dimW,dimH,Color.LIGHTGOLDENRODYELLOW);
-        
+
+        Modele modele = new Modele();
+
+        for (int y = 0; y < modele.grille.dimY; y++) {
+            for (int x = 0; x < modele.grille.dimX; x++) {
+                final Text t = new Text(Character.toString(modele.grille.plateau[x][y].caractere));
+
+                System.out.print(modele.grille.plateau[x][y].caractere);
+                t.setWrappingWidth(30);
+                t.setFont(Font.font ("Verdana", 20));
+                t.setTextAlignment(TextAlignment.CENTER);
+
+                gPane.add(t, x, y);
+            }
+            System.out.println();
+        }
+
+        gPane.setGridLinesVisible(true);
+        border.setCenter(gPane);
+
+
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);
-        
-        Rectangle rectangle = new Rectangle();
-        rectangle.setX(5);
-        rectangle.setY(5);
-        rectangle.setWidth(200);
-        rectangle.setHeight(200);
-        rectangle.setFill(Color.BLUEVIOLET);
-        rectangle.setStroke(Color.BLACK);
-        rectangle.setStrokeWidth(10);
-        root.getChildren().add(rectangle);
-       
         primaryStage.show();
     }
 

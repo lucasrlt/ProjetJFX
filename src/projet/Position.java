@@ -12,7 +12,12 @@ package projet;
 public class Position {
     private int x;
     private int y;
-    
+
+    public Position(int _x, int _y) {
+        this.x = _x;
+        this.y = _y;
+    }
+
     public int getPositionX()
     {
         return this.x;
