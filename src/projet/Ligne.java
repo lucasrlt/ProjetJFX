@@ -1,7 +1,7 @@
 package projet;
 
 public enum Ligne {
-    HORIZONTAL,
+    HORIZONTALE,
     VERTICALE,
     BAS_DROITE,
     BAS_GAUCHE,

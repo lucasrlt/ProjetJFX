@@ -30,7 +30,7 @@ public class Grille {
     public void initGrille() {
         for (int y = 0; y < dimY; y++) {
             for (int x = 0; x < dimX; x++) {
-                plateau[x][y] = new Case(new Position(x, y));
+                plateau[x][y] = new CaseLigne(new Position(x, y), Ligne.BAS_GAUCHE);
             }
         }
     }
