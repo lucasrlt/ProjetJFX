@@ -13,17 +13,16 @@ public class Modele extends Observable {
     }
         public void enfoncerClicGrille(int c, int r) {
             // TODO
-            System.out.println("startDD : " + c + "-" + r);
+            System.out.println("Début du chemin : " + c + "-" + r);
             setChanged();
             notifyObservers();
         }
 
-        public void relacherCliclGrille(int c, int r) {
+        public void relacherClicGrille(int c, int r) {
             // TODO
-
             // mémoriser le dernier objet renvoyé par parcoursDD pour connaitre la case de relachement
 
-            System.out.println("stopDD : " + c + "-" + r + " -> " + lastC + "-" + lastR);
+            System.out.println("Fin chemin : " + c + "-" + r + " -> " + lastC + "-" + lastR);
             setChanged();
             notifyObservers();
         }
@@ -31,7 +30,7 @@ public class Modele extends Observable {
         public void parcoursGrille(int c, int r) {
             lastC = c;
             lastR = r;
-            System.out.println("parcoursDD : " + c + "-" + r);
+            System.out.println("Case que vous pointez : " + c + "-" + r);
             setChanged();
             notifyObservers();
         }

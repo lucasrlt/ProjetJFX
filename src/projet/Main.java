@@ -5,6 +5,7 @@
  */
 package projet;
 
+import javafx.scene.input.*;
 import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -23,6 +24,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.Console;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
@@ -32,30 +35,66 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        
-        int dimW = 800;
-        int dimH = 800;
-        int colonne = 0;
-        int ligne = 0;
-
 
         BorderPane border = new BorderPane();
         GridPane gPane = new GridPane();
-        Group root = new Group();
 
         Modele modele = new Modele();
         Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
+        /*Text affichage = new Text("Grille Drag&Drop");
+        affichage.setFont(Font.font("Verdana", 30));
+        affichage.setFill(Color.RED);
+        border.setTop(affichage); TODO Modifier pour avoir les règles*/
+
+        modele.addObserver(new Observer() {
+
+            @Override
+            public void update(Observable o, Object arg) {
+                // TODO
+            }
+        });
+
+
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
-                final Text t = new Text(Character.toString(modele.grille.plateau[x][y].caractere));
 
+                final int clicPosY = y;
+                final int clicPosX = x;
+
+                final Text t = new Text(Character.toString(modele.grille.plateau[x][y].caractere));
+                tabText[y][x] = t;
                 System.out.print(modele.grille.plateau[x][y].caractere);
                 t.setWrappingWidth(30);
                 t.setFont(Font.font ("Verdana", 20));
                 t.setTextAlignment(TextAlignment.CENTER);
 
                 tabText[x][y] = t;
-                gPane.add(t, x, y);
+                t.setOnDragDetected(new EventHandler<MouseEvent>() { //Au premier clic
+                    public void handle(MouseEvent event) {
+
+                        Dragboard db = t.startDragAndDrop(TransferMode.ANY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putString("");
+                        db.setContent(content);
+                        event.consume();
+                        modele.enfoncerClicGrille(clicPosY, clicPosX);
+                    }
+                });
+
+                t.setOnDragEntered(new EventHandler<DragEvent>() { //Quand le clic est maintenu
+                    public void handle(DragEvent event) {
+
+                        modele.parcoursGrille(clicPosY, clicPosX);
+                        event.consume();
+                    }
+                });
+
+                t.setOnDragDone(new EventHandler<DragEvent>() { //Clic relaché
+                    public void handle(DragEvent event) {
+                        modele.relacherClicGrille(clicPosY, clicPosX);
+                    }
+                });
+                gPane.add(tabText[y][x], y, x);
             }
             System.out.println();
         }
@@ -69,7 +108,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
     /**
      * @param args the command line arguments
      */
