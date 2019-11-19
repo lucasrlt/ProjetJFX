@@ -37,7 +37,7 @@ public class Grille {
         plateau[0][0] = new CaseSymbole(new Position(0, 0), Symbole.CARRE);
         plateau[1][2] = new CaseSymbole(new Position(0, 0), Symbole.CARRE);
 
-        plateau[2][0] = new CaseSymbole(new Position(0, 0), Symbole.CROIX);
-        plateau[2][2] = new CaseSymbole(new Position(0, 0), Symbole.CROIX);
+        plateau[2][0] = new CaseSymbole(new Position(0, 0), Symbole.ROND);
+        plateau[2][2] = new CaseSymbole(new Position(0, 0), Symbole.ROND);
     }
 }

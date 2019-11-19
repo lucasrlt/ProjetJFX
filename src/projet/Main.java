@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -35,22 +37,36 @@ public class Main extends Application {
 
         BorderPane border = new BorderPane();
         GridPane gPane = new GridPane();
-        Group root = new Group();
         Modele modele = new Modele();
         Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
-                final Text t = new Text(modele.grille.plateau[x][y].caractere == '_' ? " " : ((CaseSymbole) modele.grille.plateau[x][y]).symbole.toString());
+                Group root = new Group();
 
-                System.out.print(modele.grille.plateau[x][y].caractere);
-                t.setWrappingWidth(30);
-                t.setFont(Font.font ("Verdana", 20));
-                t.setTextAlignment(TextAlignment.CENTER);
+                Rectangle r = new Rectangle(x, y, 100, 100);
+                r.setFill(Color.WHITE);
+                r.setStroke(Color.BLACK);
 
-                tabText[x][y] = t;
-                gPane.add(t, x, y);
+                root.getChildren().add(r);
+
+                if (modele.grille.plateau[x][y] instanceof CaseSymbole) {
+                    Symbole s = ((CaseSymbole) modele.grille.plateau[x][y]).symbole;
+                    if (s == Symbole.CARRE) {
+                        Rectangle re = new Rectangle(100 / 2 - 20, 100 / 2 - 20, 40, 40);
+                        re.setFill(Color.BLUE);
+                        root.getChildren().add(re);
+                    }
+                    if (s == Symbole.ROND) {
+                        Circle re = new Circle(50, 50, 20);
+                        re.setFill(Color.BLACK);
+                        root.getChildren().add(re);
+                    }
+
+                }
+
+
+                gPane.add(root, x, y);
             }
-            System.out.println();
         }
 
         gPane.setGridLinesVisible(true);
