@@ -49,7 +49,7 @@ public class Main extends Application {
         rectangle.setY(5);
         rectangle.setWidth(200);
         rectangle.setHeight(200);
-        rectangle.setFill(Color.MAROON);
+        rectangle.setFill(Color.BLUEVIOLET);
         rectangle.setStroke(Color.BLACK);
         rectangle.setStrokeWidth(10);
         root.getChildren().add(rectangle);
