@@ -5,24 +5,18 @@
  */
 package projet;
 
-import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;  
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.io.Console;
+import projet.modele.CaseSymbole;
+import projet.modele.Symbole;
 
 /**
  *
@@ -42,12 +36,11 @@ public class Main extends Application {
         BorderPane border = new BorderPane();
         GridPane gPane = new GridPane();
         Group root = new Group();
-
         Modele modele = new Modele();
         Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
-                final Text t = new Text(Character.toString(modele.grille.plateau[x][y].caractere));
+                final Text t = new Text(modele.grille.plateau[x][y].caractere == '_' ? " " : ((CaseSymbole) modele.grille.plateau[x][y]).symbole.toString());
 
                 System.out.print(modele.grille.plateau[x][y].caractere);
                 t.setWrappingWidth(30);
@@ -76,5 +69,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
