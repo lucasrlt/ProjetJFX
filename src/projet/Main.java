@@ -37,14 +37,14 @@ public class Main extends Application {
         int dimH = 800;
         int colonne = 0;
         int ligne = 0;
-   
+
+
         BorderPane border = new BorderPane();
         GridPane gPane = new GridPane();
         Group root = new Group();
-        Scene scene = new Scene(root,dimW,dimH,Color.LIGHTGOLDENRODYELLOW);
 
         Modele modele = new Modele();
-
+        Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
                 final Text t = new Text(Character.toString(modele.grille.plateau[x][y].caractere));
@@ -54,6 +54,7 @@ public class Main extends Application {
                 t.setFont(Font.font ("Verdana", 20));
                 t.setTextAlignment(TextAlignment.CENTER);
 
+                tabText[x][y] = t;
                 gPane.add(t, x, y);
             }
             System.out.println();
@@ -62,6 +63,7 @@ public class Main extends Application {
         gPane.setGridLinesVisible(true);
         border.setCenter(gPane);
 
+        Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
 
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);
