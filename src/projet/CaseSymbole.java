@@ -9,6 +9,11 @@ package projet;
  *
  * @author p1710505
  */
-public class Chemin {
-    
+public class CaseSymbole extends Case{
+    Symbole symbole;
+
+    public CaseSymbole(Position _p, Symbole _s) {
+        super(_p, 'S');
+        this.symbole = _s;
+    }
 }
