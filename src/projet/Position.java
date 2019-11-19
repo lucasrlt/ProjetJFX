@@ -1,0 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package projet;
+
+/**
+ *
+ * @author p1710505
+ */
+public class Position {
+    private int x;
+    private int y;
+    
+    public int getPositionX()
+    {
+        return this.x;
+    }
+    public int getPositionY()
+    {
+        return this.y;
+    }
+    public void setPositionX(int x)
+    {
+        this.x = x;
+    }
+    public void setPositionY(int y)
+    {
+        this.y = y;
+    }
+}
