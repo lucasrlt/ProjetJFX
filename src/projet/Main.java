@@ -26,8 +26,12 @@ import java.io.Console;
 import java.util.Observable;
 import java.util.Observer;
 import projet.modele.CaseSymbole;
+import projet.modele.Ligne;
 import projet.modele.Position;
 import projet.modele.Symbole;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 
 /**
  *
@@ -60,10 +64,9 @@ public class Main extends Application {
 
                     for (Node node : childrens) {
                         if (gPane.getRowIndex(node) == p.y && gPane.getColumnIndex(node) == p.x) {
-                            Rectangle r = new Rectangle(47, 10, 6, 80);
-                            r.setFill(Color.DARKRED);
+                            // Rectangle r = new Rectangle(47, 10, 6, 80);
 
-                            ((Group) node).getChildren().add(r);
+                            ((Group) node).getChildren().add(dessinerLigne(Ligne.HORIZONTALE));
                             break;
                         }
                     }
@@ -81,6 +84,56 @@ public class Main extends Application {
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private Node dessinerLigne(Ligne type) {
+        if (type == Ligne.VERTICALE) {
+            Rectangle ligne = new Rectangle(47, 5, 6, 90);
+            ligne.setFill(Color.DARKRED);
+            ligne.setStrokeWidth(6);
+
+            return ligne;
+        }
+        else if (type == Ligne.HORIZONTALE) {
+            Rectangle ligne = new Rectangle(5, 47, 90, 6);
+            ligne.setFill(Color.DARKRED);
+            ligne.setStrokeWidth(6);
+
+            return ligne;
+        }
+        else {
+            final int startX = 50;
+            final int startY = type == Ligne.HAUT_DROITE || type == Ligne.HAUT_GAUCHE ? 5 : 95;
+
+            final int endX = type == Ligne.HAUT_GAUCHE || type == Ligne.BAS_GAUCHE ? 5 : 95;
+            final int endY = 53;
+            //Creating an object of the class named Path
+            Path path = new Path();
+
+            //Moving to the starting point
+            MoveTo moveTo = new MoveTo();
+            moveTo.setX(startX);
+            moveTo.setY(startY);
+
+            //Instantiating the class CubicCurve
+            CubicCurveTo cubicCurveTo = new CubicCurveTo();
+
+            //Setting properties of the class CubicCurve
+            cubicCurveTo.setControlX1(50);
+            cubicCurveTo.setControlY1(53);
+            cubicCurveTo.setControlX2(50);
+            cubicCurveTo.setControlY2(53);
+            cubicCurveTo.setX(endX);
+            cubicCurveTo.setY(endY);
+
+            path.setStroke(Color.DARKRED);
+            path.setStrokeWidth(6);
+            //Adding the path elements to Observable list of the Path class
+            path.getElements().add(moveTo);
+            path.getElements().add(cubicCurveTo);
+
+            return path;
+        }
     }
 
     private GridPane dessinerGrille() {
