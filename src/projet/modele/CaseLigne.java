@@ -12,7 +12,7 @@ package projet.modele;
 public class CaseLigne extends Case {
     Ligne ligne;
 
-    CaseLigne(Position _position, Ligne _ligne) {
+    public CaseLigne(Position _position, Ligne _ligne) {
         super(_position, 'L');
         this.ligne = _ligne;
     }

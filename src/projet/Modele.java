@@ -1,6 +1,6 @@
 package projet;
 
-import projet.modele.Grille;
+import projet.modele.*;
 
 import java.util.Observable;
 
@@ -29,12 +29,16 @@ public class Modele extends Observable {
             notifyObservers();
         }
 
-        public void parcoursGrille(int c, int r) {
+        public void parcoursGrille(int r, int c) {
             lastC = c;
             lastR = r;
             System.out.println("Case que vous pointez : " + c + "-" + r);
-            setChanged();
-            notifyObservers();
+
+            if (!(grille.plateau[c][r] instanceof CaseSymbole)) {
+                grille.plateau[c][r] = new CaseLigne(new Position(c, r), Ligne.VERTICALE);
+                setChanged();
+                notifyObservers(new Position(c, r));
+            }
         }
 
 

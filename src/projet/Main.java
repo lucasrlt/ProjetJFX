@@ -5,7 +5,9 @@
  */
 package projet;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.*;
 import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
@@ -24,6 +26,7 @@ import java.io.Console;
 import java.util.Observable;
 import java.util.Observer;
 import projet.modele.CaseSymbole;
+import projet.modele.Position;
 import projet.modele.Symbole;
 
 /**
@@ -31,14 +34,14 @@ import projet.modele.Symbole;
  * @author p1710505
  */
 public class Main extends Application {
+    Modele modele;
 
     @Override
     public void start(Stage primaryStage) {
 
         BorderPane border = new BorderPane();
-        GridPane gPane = new GridPane();
+        modele = new Modele();
 
-        Modele modele = new Modele();
         Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
         /*
          * Text affichage = new Text("Grille Drag&Drop");
@@ -46,13 +49,42 @@ public class Main extends Application {
          * border.setTop(affichage); TODO Modifier pour avoir les règles
          */
 
-        modele.addObserver(new Observer() {
+        final GridPane gPane = dessinerGrille();
 
+        modele.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                // TODO
+                if (arg != null) {
+                    Position p = (Position) arg;
+                    ObservableList<Node> childrens = gPane.getChildren();
+
+                    for (Node node : childrens) {
+                        if (gPane.getRowIndex(node) == p.y && gPane.getColumnIndex(node) == p.x) {
+                            Rectangle r = new Rectangle(47, 10, 6, 80);
+                            r.setFill(Color.DARKRED);
+
+                            ((Group) node).getChildren().add(r);
+                            break;
+                        }
+                    }
+                }
+
+
             }
         });
+
+        gPane.setGridLinesVisible(true);
+        border.setCenter(gPane);
+
+        Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
+
+        primaryStage.setTitle("Casse-tête symboles");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private GridPane dessinerGrille() {
+        GridPane gPane = new GridPane();
 
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
@@ -112,14 +144,7 @@ public class Main extends Application {
             }
         }
 
-        gPane.setGridLinesVisible(true);
-        border.setCenter(gPane);
-
-        Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
-
-        primaryStage.setTitle("Casse-tête symboles");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return gPane;
     }
 
     /**

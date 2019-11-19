@@ -10,8 +10,8 @@ package projet.modele;
  * @author p1710505
  */
 public class Position {
-    private int x;
-    private int y;
+    public int x;
+    public int y;
 
     public Position(int _x, int _y) {
         this.x = _x;
