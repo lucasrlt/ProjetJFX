@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projet;
+package projet.modele;
 
 import java.util.ArrayList;
 
@@ -30,8 +30,14 @@ public class Grille {
     public void initGrille() {
         for (int y = 0; y < dimY; y++) {
             for (int x = 0; x < dimX; x++) {
-                plateau[x][y] = new CaseLigne(new Position(x, y), Ligne.BAS_GAUCHE);
+                plateau[x][y] = new Case(new Position(x, y));
             }
         }
+
+        plateau[0][0] = new CaseSymbole(new Position(0, 0), Symbole.CARRE);
+        plateau[1][2] = new CaseSymbole(new Position(0, 0), Symbole.CARRE);
+
+        plateau[2][0] = new CaseSymbole(new Position(0, 0), Symbole.CROIX);
+        plateau[2][2] = new CaseSymbole(new Position(0, 0), Symbole.CROIX);
     }
 }

@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projet;
+package projet.modele;
 
 /**
  *
  * @author p1710505
  */
-public class Chemin {
-    
+public class CaseLigne extends Case {
+    Ligne ligne;
+
+    CaseLigne(Position _position, Ligne _ligne) {
+        super(_position, 'L');
+        this.ligne = _ligne;
+    }
 }

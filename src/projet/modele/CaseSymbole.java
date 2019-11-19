@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projet;
+package projet.modele;
 
 /**
  *
  * @author p1710505
  */
-public class CaseLigne extends Case {
-    Ligne ligne;
+public class CaseSymbole extends Case{
+    public Symbole symbole;
 
-    CaseLigne(Position _position, Ligne _ligne) {
-        super(_position, 'L');
-        this.ligne = _ligne;
+    public CaseSymbole(Position _p, Symbole _s) {
+        super(_p, 'S');
+        this.symbole = _s;
     }
 }

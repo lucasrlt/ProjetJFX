@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projet;
+package projet.modele;
 
 /**
  *
@@ -15,7 +15,7 @@ public class Case {
 
     public Case(Position _position) {
         this.position = position;
-        this.caractere = 'V';
+        this.caractere = '_';
     }
 
     public Case(Position position, char _caractere) {
