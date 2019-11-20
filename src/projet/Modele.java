@@ -13,14 +13,14 @@ public class Modele extends Observable {
 
         grille = new Grille(3, 3);
     }
-        public void enfoncerClicGrille(int c, int r) {
+        public void enfoncerClicGrille(int r, int c) {
             // TODO
             System.out.println("Début du chemin : " + c + "-" + r);
             setChanged();
             notifyObservers();
         }
 
-        public void relacherClicGrille(int c, int r) {
+        public void relacherClicGrille(int r, int c) {
             // TODO
             // mémoriser le dernier objet renvoyé par parcoursDD pour connaitre la case de relachement
 
