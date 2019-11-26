@@ -7,69 +7,98 @@ import java.util.Observable;
 public class Modele extends Observable {
     int lastC, lastR;
     public Grille grille;
-    //public Chemin chemin;
+    boolean allowDrag;
 
     public Modele() {
         super();
 
         grille = new Grille(3, 3);
+        allowDrag = false;
     }
-        public void enfoncerClicGrille(int r, int c) {
+
+    public boolean enfoncerClicGrille(int r, int c) {
+        boolean cheminCree = grille.nouveauChemin(c, r);
+
+        if (cheminCree) {
             System.out.println("Début du chemin : " + c + "-" + r);
-            grille.nouveauChemin(c, r);
+            allowDrag = true;
             setChanged();
             notifyObservers();
         }
 
-        public void relacherClicGrille(int r, int c) {
-            // TODO
-            // mémoriser le dernier objet renvoyé par parcoursDD pour connaitre la case de relachement
+        return cheminCree;
+    }
+
+    public boolean relacherClicGrille(int r, int c) {
+        // TODO
+        // mémoriser le dernier objet renvoyé par parcoursDD pour connaitre la case de relachement
+
+        if (allowDrag) {
             System.out.println("Fin chemin : " + c + "-" + r + " -> " + lastC + "-" + lastR);
 
             Case caseFinale = grille.dernierChemin().caseFinale();
-            System.out.println(lastC + " " + lastR);
             grille.finChemin(lastC, lastR);
 
-            System.out.println(grille.dernierChemin().caseFinale().position);
-
             if (caseFinale instanceof CaseLigne) {
-                System.out.println("IOIEG");
                 ((CaseLigne) grille.plateau[caseFinale.position.x][caseFinale.position.y]).ligne = grille.dernierChemin().lignePourCase(grille.dernierChemin().casesIntermediaires.size() - 2);
             }
+            allowDrag = false;
 
-            setChanged();
-            notifyObservers(new Position(lastC, lastR));
+            if (!(grille.dernierChemin().caseFinale() instanceof CaseSymbole)) {
+                setChanged();
+                notifyObservers(grille.dernierChemin());
+
+                for (Case ca : grille.dernierChemin().casesIntermediaires) {
+                    if (ca instanceof CaseLigne)
+                        grille.plateau[ca.position.x][ca.position.y] = new Case(ca.position);
+                }
+                grille.chemins.remove(grille.chemins.size() - 1);
+                return false;
+            } else {
+                setChanged();
+                notifyObservers();
+            }
         }
 
-        public void parcoursGrille(int r, int c) {
+        return true;
+    }
+
+    public boolean parcoursGrille(int r, int c) {
+        if (allowDrag) {
             lastC = c;
             lastR = r;
             System.out.println("Case que vous pointez : " + c + "-" + r);
 
-            if (!(grille.plateau[c][r] instanceof CaseSymbole) && !(grille.plateau[c][r] instanceof CaseLigne)) {
-                Case caseFinale = grille.dernierChemin().caseFinale();
+            if (!(grille.plateau[c][r] instanceof CaseLigne)) {
+                if(!(grille.plateau[c][r] instanceof CaseSymbole)) {
+                    Case caseFinale = grille.dernierChemin().caseFinale();
+
+                    if ((((c == caseFinale.position.x + 1 || c == caseFinale.position.x - 1)) && r == caseFinale.position.y) || ((r == caseFinale.position.y + 1 || r == caseFinale.position.y - 1) && c == caseFinale.position.x))
+                    {
+                        grille.plateau[c][r] = new CaseLigne(new Position(c, r), Ligne.VERTICALE);
+                        grille.chemins.get(grille.chemins.size() - 1).ajoutCaseChemin(grille.plateau[c][r]);
+                        ((CaseLigne) grille.plateau[c][r]).ligne = grille.dernierChemin().lignePourCase(grille.dernierChemin().casesIntermediaires.size() - 1);
+
+                        if (caseFinale instanceof CaseLigne) {
+                            ((CaseLigne) grille.plateau[caseFinale.position.x][caseFinale.position.y]).ligne = grille.dernierChemin().lignePourCase(grille.dernierChemin().casesIntermediaires.size() - 2);
+
+                        }
 
 
-
-                grille.plateau[c][r] = new CaseLigne(new Position(c, r), Ligne.VERTICALE);
-                grille.chemins.get(grille.chemins.size() - 1).ajoutCaseChemin(grille.plateau[c][r]);
-                ((CaseLigne) grille.plateau[c][r]).ligne  =  grille.dernierChemin().lignePourCase(grille.dernierChemin().casesIntermediaires.size() - 1);
-
-                if (caseFinale instanceof CaseLigne) {
-                    System.out.println("OUI");
-                    ((CaseLigne) grille.plateau[caseFinale.position.x][caseFinale.position.y]).ligne = grille.dernierChemin().lignePourCase(grille.dernierChemin().casesIntermediaires.size() - 2);
-
+                        setChanged();
+                        notifyObservers();
+                    }
                 }
-
-
-                setChanged();
-                notifyObservers(new Position(c, r));
+            } else if (!(new Position(c, r) == grille.dernierChemin().caseFinale().position)){
+                return false;
             }
 
             setChanged();
             notifyObservers();
-
         }
+
+        return true;
+    }
 
 
     }

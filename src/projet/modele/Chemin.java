@@ -44,20 +44,15 @@ public class Chemin {
 
         boolean isLastCell = nextCase == null;
 
-        System.out.println(prevCasePos + " " +  currCasePos + " " + nextCasePos);
         if (prevCasePos.x == currCasePos.x && prevCasePos.y == currCasePos.y - 1) {
-            System.out.println("HEY");
             if (!isLastCell && (nextCasePos.x == currCasePos.x - 1 && nextCasePos.y == currCasePos.y)) {
-                System.out.println("YO");
                 return Ligne.HAUT_GAUCHE;
             }
 
             if (!isLastCell && (nextCasePos.x == currCasePos.x + 1 && nextCasePos.y == currCasePos.y)) {
-                System.out.println("YOOOO");
                 return Ligne.HAUT_DROITE;
             }
 
-            System.out.println("MEEEH");
             return Ligne.VERTICALE;
         }
 
@@ -74,29 +69,5 @@ public class Chemin {
         }
 
         return ligne;
-
-        /* if(chId > 0 && (casesIntermediaires.get(chId-1).position.x == caseActuelle.position.x-1) &&
-                (casesIntermediaires.get(chId-1).position.y == caseActuelle.position.y))
-
-            for(int i = 1; i < casesIntermediaires.size(); i++)
-        {
-            caseActuelle = casesIntermediaires.get(i);
-
-            if((casesIntermediaires.get(i-1).position.x == caseActuelle.position.x-1) &&
-                    (casesIntermediaires.get(i-1).position.y == caseActuelle.position.y))
-            {
-                caseActuelle.caractere = 'L';
-                ((CaseLigne) caseActuelle).ligne = Ligne.HORIZONTALE;
-
-                if((casesIntermediaires.get(i+1).position.x == caseActuelle.position.x) &&
-                        (casesIntermediaires.get(i+1).position.y == caseActuelle.position.y+1))
-                {
-                    caseActuelle.caractere = 'L';
-                    ((CaseLigne) caseActuelle).ligne = Ligne.BAS_GAUCHE;
-                }
-            }
-
-        } */
-
     }
 }

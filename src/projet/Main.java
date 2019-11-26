@@ -35,7 +35,7 @@ public class Main extends Application {
     Modele modele;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
 
         BorderPane border = new BorderPane();
         modele = new Modele();
@@ -47,49 +47,32 @@ public class Main extends Application {
          * border.setTop(affichage); TODO Modifier pour avoir les règles
          */
 
-        final GridPane gPane = dessinerGrille();
+        final GridPane gPane = new GridPane();
+        dessinerGrille(gPane, primaryStage);
 
         modele.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
                 if (arg != null) {
-                    Position p = (Position) arg;
-                    ObservableList<Node> childrens = gPane.getChildren();
-
-                    Position avantDerniereCase = modele.grille.dernierChemin().casesIntermediaires.get(modele.grille.dernierChemin().casesIntermediaires.size() - 2).position;
-                    System.out.println("AOAFHZF" + modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y]);
-
-                    if (modele.grille.plateau[p.x][p.y] instanceof CaseLigne) {
-                        for (Node node : childrens) {
-                            if (gPane.getRowIndex(node) == p.y && gPane.getColumnIndex(node) == p.x) {
-                                System.out.println(p);
-                                // modele.grille.plateau[p.x][p.y]).ligne
-                                ((Group) node).getChildren().add(dessinerLigne(((CaseLigne) modele.grille.plateau[p.x][p.y]).ligne));
-                                break;
+                    for (Case c : ((Chemin) arg).casesIntermediaires) {
+                        if (c instanceof CaseLigne) {
+                            ObservableList<Node> noeuPourCase = ((Group) gPane.getChildren().get(c.position.y * modele.grille.dimX + c.position.x)).getChildren();
+                            if (noeuPourCase.size() > 1)
+                                noeuPourCase.remove(1, 2);
+                        }
+                    }
+                } else {
+                    for (Chemin ch : modele.grille.chemins) {
+                        for (Case c : ch.casesIntermediaires) {
+                            if (c instanceof CaseLigne) {
+                                ObservableList<Node> noeuPourCase = ((Group) gPane.getChildren().get(c.position.y * modele.grille.dimX + c.position.x)).getChildren();
+                                if (noeuPourCase.size() > 1)
+                                    noeuPourCase.remove(1, 2);
+                                noeuPourCase.add(dessinerLigne(((CaseLigne) c).ligne));
                             }
                         }
                     }
-
-                    if ((modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y] instanceof CaseLigne)) {
-                        System.out.println("ON RENTRE ICI");
-                        for (Node node : childrens) {
-                            if (gPane.getRowIndex(node) == avantDerniereCase.y && gPane.getColumnIndex(node) == avantDerniereCase.x) {
-                                // modele.grille.plateau[p.x][p.y]).ligne
-                                ((Group) node).getChildren().remove(1, 2);
-                                ((Group) node).getChildren().add(dessinerLigne(((CaseLigne) modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y]).ligne));
-
-                                System.out.println(((CaseLigne) modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y]).ligne);
-                                System.out.println("ON UPDATE");
-                                break;
-                            }
-                        }
-                    }
-
-
-
                 }
-
-
             }
         });
 
@@ -153,8 +136,8 @@ public class Main extends Application {
         }
     }
 
-    private GridPane dessinerGrille() {
-        GridPane gPane = new GridPane();
+    private void dessinerGrille(GridPane gPane, Stage primaryStage) {
+        gPane.getChildren().clear();
 
         for (int y = 0; y < modele.grille.dimY; y++) {
             for (int x = 0; x < modele.grille.dimX; x++) {
@@ -192,29 +175,35 @@ public class Main extends Application {
                         content.putString("");
                         db.setContent(content);
                         event.consume();
-                        modele.enfoncerClicGrille(clicPosY, clicPosX);
+
+                        if (!modele.enfoncerClicGrille(clicPosY, clicPosX)) {
+                            Toast.makeText(primaryStage, "Tout chemin doit\ncommencer sur un symbôle.", 1000, 200, 200);
+                        }
                     }
                 });
 
                 root.setOnDragEntered(new EventHandler<DragEvent>() { // Quand le clic est maintenu
                     public void handle(DragEvent event) {
 
-                        modele.parcoursGrille(clicPosY, clicPosX);
+                        if (!modele.parcoursGrille(clicPosY, clicPosX)) {
+                            Toast.makeText(primaryStage, "Impossible d'aller sur cette case.", 1000, 200, 200);
+                        }
+
                         event.consume();
                     }
                 });
 
                 root.setOnDragDone(new EventHandler<DragEvent>() { // Clic relaché
                     public void handle(DragEvent event) {
-                        modele.relacherClicGrille(clicPosY, clicPosX);
+                        if (!modele.relacherClicGrille(clicPosY, clicPosX)) {
+                            Toast.makeText(primaryStage, "Tout chemin doit finir sur un symbôle.", 1000, 200, 200);
+                        }
                     }
                 });
 
                 gPane.add(root, x, y);
             }
         }
-
-        return gPane;
     }
 
     /**

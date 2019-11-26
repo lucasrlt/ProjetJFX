@@ -43,11 +43,17 @@ public class Grille {
 
     public Chemin dernierChemin() { return chemins.get(chemins.size() - 1); }
 
-    public void nouveauChemin(int x, int y) {
-        Chemin nc = new Chemin(plateau[x][y]);
-        chemins.add(nc);
+    public boolean nouveauChemin(int x, int y) {
+        if (plateau[x][y] instanceof CaseSymbole) {
+            Chemin nc = new Chemin(plateau[x][y]);
+            chemins.add(nc);
 
-        System.out.println("OUI");
+            return true;
+        } else {
+            System.out.println("/!\\ Tout chemin doit démarrer à un symbôle !");
+        }
+
+        return false;
     }
 
     public void ajouterLigne(int x, int y) {
@@ -55,7 +61,6 @@ public class Grille {
     }
 
     public void finChemin(int x, int y) {
-        System.out.println("FIN DU CHEMIN: " + plateau[x][y].position);
         chemins.get(chemins.size() - 1).ajoutCaseChemin(plateau[x][y]);
     }
 }
