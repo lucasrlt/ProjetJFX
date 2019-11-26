@@ -10,7 +10,7 @@ package projet.modele;
  * @author p1710505
  */
 public class CaseLigne extends Case {
-    Ligne ligne;
+    public Ligne ligne;
 
     public CaseLigne(Position _position, Ligne _ligne) {
         super(_position, 'L');

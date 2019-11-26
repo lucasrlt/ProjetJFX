@@ -15,14 +15,14 @@ public class Grille {
     public Case[][] plateau;
     public int dimX;
     public int dimY;
-    public ArrayList<Chemin> chemin;
+    public ArrayList<Chemin> chemins;
     
     public Grille(int dimX, int dimY)
     {
         this.dimX = dimX;
         this.dimY = dimY;
         this.plateau = new Case[this.dimX][this.dimY];
-        this.chemin = new ArrayList();
+        this.chemins = new ArrayList();
 
         this.initGrille();
     }
@@ -35,9 +35,27 @@ public class Grille {
         }
 
         plateau[0][0] = new CaseSymbole(new Position(0, 0), Symbole.CARRE);
-        plateau[1][2] = new CaseSymbole(new Position(0, 0), Symbole.CARRE);
+        plateau[1][2] = new CaseSymbole(new Position(1, 2), Symbole.CARRE);
 
-        plateau[2][0] = new CaseSymbole(new Position(0, 0), Symbole.ROND);
-        plateau[2][2] = new CaseSymbole(new Position(0, 0), Symbole.ROND);
+        plateau[2][0] = new CaseSymbole(new Position(2, 0), Symbole.ROND);
+        plateau[2][2] = new CaseSymbole(new Position(2, 2), Symbole.ROND);
+    }
+
+    public Chemin dernierChemin() { return chemins.get(chemins.size() - 1); }
+
+    public void nouveauChemin(int x, int y) {
+        Chemin nc = new Chemin(plateau[x][y]);
+        chemins.add(nc);
+
+        System.out.println("OUI");
+    }
+
+    public void ajouterLigne(int x, int y) {
+        chemins.get(chemins.size() - 1).ajoutCaseChemin(plateau[x][y]);
+    }
+
+    public void finChemin(int x, int y) {
+        System.out.println("FIN DU CHEMIN: " + plateau[x][y].position);
+        chemins.get(chemins.size() - 1).ajoutCaseChemin(plateau[x][y]);
     }
 }

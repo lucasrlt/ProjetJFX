@@ -21,10 +21,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.Observable;
 import java.util.Observer;
-import projet.modele.CaseSymbole;
-import projet.modele.Ligne;
-import projet.modele.Position;
-import projet.modele.Symbole;
+
+import projet.modele.*;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -58,12 +56,37 @@ public class Main extends Application {
                     Position p = (Position) arg;
                     ObservableList<Node> childrens = gPane.getChildren();
 
-                    for (Node node : childrens) {
-                        if (gPane.getRowIndex(node) == p.y && gPane.getColumnIndex(node) == p.x) {
-                            ((Group) node).getChildren().add(dessinerLigne(Ligne.HORIZONTALE));
-                            break;
+                    Position avantDerniereCase = modele.grille.dernierChemin().casesIntermediaires.get(modele.grille.dernierChemin().casesIntermediaires.size() - 2).position;
+                    System.out.println("AOAFHZF" + modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y]);
+
+                    if (modele.grille.plateau[p.x][p.y] instanceof CaseLigne) {
+                        for (Node node : childrens) {
+                            if (gPane.getRowIndex(node) == p.y && gPane.getColumnIndex(node) == p.x) {
+                                System.out.println(p);
+                                // modele.grille.plateau[p.x][p.y]).ligne
+                                ((Group) node).getChildren().add(dessinerLigne(((CaseLigne) modele.grille.plateau[p.x][p.y]).ligne));
+                                break;
+                            }
                         }
                     }
+
+                    if ((modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y] instanceof CaseLigne)) {
+                        System.out.println("ON RENTRE ICI");
+                        for (Node node : childrens) {
+                            if (gPane.getRowIndex(node) == avantDerniereCase.y && gPane.getColumnIndex(node) == avantDerniereCase.x) {
+                                // modele.grille.plateau[p.x][p.y]).ligne
+                                ((Group) node).getChildren().remove(1, 2);
+                                ((Group) node).getChildren().add(dessinerLigne(((CaseLigne) modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y]).ligne));
+
+                                System.out.println(((CaseLigne) modele.grille.plateau[avantDerniereCase.x][avantDerniereCase.y]).ligne);
+                                System.out.println("ON UPDATE");
+                                break;
+                            }
+                        }
+                    }
+
+
+
                 }
 
 
