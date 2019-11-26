@@ -17,12 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.io.Console;
 import java.util.Observable;
 import java.util.Observer;
 import projet.modele.CaseSymbole;
@@ -64,8 +60,6 @@ public class Main extends Application {
 
                     for (Node node : childrens) {
                         if (gPane.getRowIndex(node) == p.y && gPane.getColumnIndex(node) == p.x) {
-                            // Rectangle r = new Rectangle(47, 10, 6, 80);
-
                             ((Group) node).getChildren().add(dessinerLigne(Ligne.HORIZONTALE));
                             break;
                         }
