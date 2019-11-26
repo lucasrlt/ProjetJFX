@@ -7,6 +7,7 @@ import java.util.Observable;
 public class Modele extends Observable {
     int lastC, lastR;
     public Grille grille;
+    //public Chemin chemin;
 
     public Modele() {
         super();
@@ -35,7 +36,7 @@ public class Modele extends Observable {
             System.out.println("Case que vous pointez : " + c + "-" + r);
 
             if (!(grille.plateau[c][r] instanceof CaseSymbole)) {
-                grille.plateau[c][r] = new CaseLigne(new Position(c, r), Ligne.VERTICALE);
+                grille.plateau[c][r] = new CaseLigne(new Position(c, r), Ligne.VERTICALE);//chemin.verifierChemin(grille)
                 setChanged();
                 notifyObservers(new Position(c, r));
             }
