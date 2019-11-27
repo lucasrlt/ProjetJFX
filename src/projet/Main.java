@@ -7,7 +7,9 @@ package projet;
 
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
@@ -17,8 +19,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -39,13 +44,7 @@ public class Main extends Application {
 
         BorderPane border = new BorderPane();
         modele = new Modele();
-
-        Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
-        /*
-         * Text affichage = new Text("Grille Drag&Drop");
-         * affichage.setFont(Font.font("Verdana", 30)); affichage.setFill(Color.RED);
-         * border.setTop(affichage); TODO Modifier pour avoir les règles
-         */
+        //Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
 
         final GridPane gPane = new GridPane();
         dessinerGrille(gPane, primaryStage);
@@ -77,9 +76,29 @@ public class Main extends Application {
         });
 
         gPane.setGridLinesVisible(true);
+        gPane.setAlignment(Pos.CENTER);
         border.setCenter(gPane);
 
         Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
+
+        final GridPane rPane = new GridPane();
+        Text affichage = new Text("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
+        affichage.setFont(Font.font("Verdana", 20));
+        affichage.setTextAlignment(TextAlignment.CENTER);
+        affichage.setFill(Color.MAROON);
+        rPane.add(affichage,0,0);
+
+        rPane.setAlignment(Pos.CENTER);
+        border.setTop(rPane);
+
+        final GridPane bPane = new GridPane();
+        Button nouvellePartie = new Button("Nouvelle Partie");
+        bPane.add(nouvellePartie,0,0);
+        nouvellePartie.setTextFill(Color.MAROON);
+        nouvellePartie.setTextAlignment(TextAlignment.CENTER);
+
+        bPane.setAlignment(Pos.CENTER);
+        border.setBottom(bPane);
 
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);

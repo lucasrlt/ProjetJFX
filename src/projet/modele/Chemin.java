@@ -44,13 +44,21 @@ public class Chemin {
 
         boolean isLastCell = nextCase == null;
 
-        if (prevCasePos.x == currCasePos.x && prevCasePos.y == currCasePos.y - 1) {
-            if (!isLastCell && (nextCasePos.x == currCasePos.x - 1 && nextCasePos.y == currCasePos.y)) {
+        if (prevCasePos.x == currCasePos.x) {
+            if (prevCasePos.y == currCasePos.y - 1 && !isLastCell && (nextCasePos.x == currCasePos.x - 1 && nextCasePos.y == currCasePos.y)) {
                 return Ligne.HAUT_GAUCHE;
             }
 
-            if (!isLastCell && (nextCasePos.x == currCasePos.x + 1 && nextCasePos.y == currCasePos.y)) {
+            if (prevCasePos.y == currCasePos.y - 1 && !isLastCell && (nextCasePos.x == currCasePos.x + 1 && nextCasePos.y == currCasePos.y)) {
                 return Ligne.HAUT_DROITE;
+            }
+
+            if (prevCasePos.y == currCasePos.y + 1 && !isLastCell && (nextCasePos.x == currCasePos.x + 1 && nextCasePos.y == currCasePos.y)) {
+                return Ligne.BAS_DROITE;
+            }
+
+            if (prevCasePos.y == currCasePos.y + 1 && !isLastCell && (nextCasePos.x == currCasePos.x - 1 && nextCasePos.y == currCasePos.y)) {
+                return Ligne.BAS_GAUCHE;
             }
 
             return Ligne.VERTICALE;
@@ -63,6 +71,14 @@ public class Chemin {
 
             if (prevCasePos.x == currCasePos.x + 1 && !isLastCell && (nextCasePos.x == currCasePos.x && nextCasePos.y == currCasePos.y + 1)) {
                 return Ligne.BAS_DROITE;
+            }
+
+            if (prevCasePos.x == currCasePos.x + 1 && !isLastCell && (nextCasePos.x == currCasePos.x && nextCasePos.y == currCasePos.y - 1)) {
+                return Ligne.HAUT_DROITE;
+            }
+
+            if (prevCasePos.x == currCasePos.x - 1 && !isLastCell && (nextCasePos.x == currCasePos.x && nextCasePos.y == currCasePos.y - 1)) {
+                return Ligne.HAUT_GAUCHE;
             }
 
             return Ligne.HORIZONTALE;
