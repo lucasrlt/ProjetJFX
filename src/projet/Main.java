@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import javafx.scene.shape.Rectangle;
@@ -37,42 +38,57 @@ import javafx.scene.shape.Path;
  * @author p1710505
  */
 public class Main extends Application {
-    Modele modele;
+    Controleur controleur;
 
     @Override
     public void start(final Stage primaryStage) {
 
         BorderPane border = new BorderPane();
-        modele = new Modele();
-        //Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
+        controleur = new Controleur();
+        // Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
 
         final GridPane gPane = new GridPane();
         dessinerGrille(gPane, primaryStage);
 
-        modele.addObserver(new Observer() {
+        controleur.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                if (arg != null) {
-                    for (Case c : ((Chemin) arg).casesIntermediaires) {
-                        if (c instanceof CaseLigne) {
-                            ObservableList<Node> noeuPourCase = ((Group) gPane.getChildren().get(c.position.y * modele.grille.dimX + c.position.x)).getChildren();
+                // Nettoyage du board
+                for (int y = 0; y <controleur.grille.dimY; y++) {
+                    for (int x = 0; x < controleur.grille.dimX; x++) {
+                        Case c = controleur.grille.plateau[x][y];
+
+                        if (!(c instanceof CaseSymbole)) {
+                            ObservableList<Node> noeuPourCase = ((Group) gPane.getChildren()
+                                    .get(y * controleur.grille.dimX + x)).getChildren();
                             if (noeuPourCase.size() > 1)
                                 noeuPourCase.remove(1, 2);
                         }
                     }
-                } else {
-                    for (Chemin ch : modele.grille.chemins) {
-                        for (Case c : ch.casesIntermediaires) {
-                            if (c instanceof CaseLigne) {
-                                ObservableList<Node> noeuPourCase = ((Group) gPane.getChildren().get(c.position.y * modele.grille.dimX + c.position.x)).getChildren();
-                                if (noeuPourCase.size() > 1)
-                                    noeuPourCase.remove(1, 2);
-                                noeuPourCase.add(dessinerLigne(((CaseLigne) c).ligne));
-                            }
+                }
+
+                // Affichage des chemins
+                for (Chemin ch : controleur.grille.chemins) {
+                    for (Case c : ch.casesIntermediaires) {
+                        if (c instanceof CaseLigne) {
+                            ObservableList<Node> noeuPourCase = ((Group) gPane.getChildren()
+                                    .get(c.position.y * controleur.grille.dimX + c.position.x)).getChildren();
+                            if (noeuPourCase.size() > 1)
+                                noeuPourCase.remove(1, 2);
+                            noeuPourCase.add(dessinerLigne(((CaseLigne) c).ligne));
                         }
                     }
                 }
+
+                if (controleur.grille.verifierVictoire()) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Victoire !");
+                    alert.setHeaderText("Vous avez gagné !");
+
+                    alert.showAndWait();
+                }
             }
+
         });
 
         gPane.setGridLinesVisible(true);
@@ -82,18 +98,19 @@ public class Main extends Application {
         Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
 
         final GridPane rPane = new GridPane();
-        Text affichage = new Text("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
+        Text affichage = new Text(
+                "Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
         affichage.setFont(Font.font("Verdana", 20));
         affichage.setTextAlignment(TextAlignment.CENTER);
         affichage.setFill(Color.MAROON);
-        rPane.add(affichage,0,0);
+        rPane.add(affichage, 0, 0);
 
         rPane.setAlignment(Pos.CENTER);
         border.setTop(rPane);
 
         final GridPane bPane = new GridPane();
         Button nouvellePartie = new Button("Nouvelle Partie");
-        bPane.add(nouvellePartie,0,0);
+        bPane.add(nouvellePartie, 0, 0);
         nouvellePartie.setTextFill(Color.MAROON);
         nouvellePartie.setTextAlignment(TextAlignment.CENTER);
 
@@ -112,32 +129,30 @@ public class Main extends Application {
             ligne.setStrokeWidth(6);
 
             return ligne;
-        }
-        else if (type == Ligne.HORIZONTALE) {
+        } else if (type == Ligne.HORIZONTALE) {
             Rectangle ligne = new Rectangle(5, 47, 90, 6);
             ligne.setFill(Color.DARKRED);
             ligne.setStrokeWidth(6);
 
             return ligne;
-        }
-        else {
+        } else {
             final int startX = 50;
             final int startY = type == Ligne.HAUT_DROITE || type == Ligne.HAUT_GAUCHE ? 5 : 95;
 
             final int endX = type == Ligne.HAUT_GAUCHE || type == Ligne.BAS_GAUCHE ? 5 : 95;
             final int endY = 53;
-            //Creating an object of the class named Path
+            // Creating an object of the class named Path
             Path path = new Path();
 
-            //Moving to the starting point
+            // Moving to the starting point
             MoveTo moveTo = new MoveTo();
             moveTo.setX(startX);
             moveTo.setY(startY);
 
-            //Instantiating the class CubicCurve
+            // Instantiating the class CubicCurve
             CubicCurveTo cubicCurveTo = new CubicCurveTo();
 
-            //Setting properties of the class CubicCurve
+            // Setting properties of the class CubicCurve
             cubicCurveTo.setControlX1(50);
             cubicCurveTo.setControlY1(53);
             cubicCurveTo.setControlX2(50);
@@ -147,7 +162,7 @@ public class Main extends Application {
 
             path.setStroke(Color.DARKRED);
             path.setStrokeWidth(6);
-            //Adding the path elements to Observable list of the Path class
+            // Adding the path elements to Observable list of the Path class
             path.getElements().add(moveTo);
             path.getElements().add(cubicCurveTo);
 
@@ -158,8 +173,8 @@ public class Main extends Application {
     private void dessinerGrille(GridPane gPane, Stage primaryStage) {
         gPane.getChildren().clear();
 
-        for (int y = 0; y < modele.grille.dimY; y++) {
-            for (int x = 0; x < modele.grille.dimX; x++) {
+        for (int y = 0; y < controleur.grille.dimY; y++) {
+            for (int x = 0; x < controleur.grille.dimX; x++) {
                 Group root = new Group();
 
                 final int clicPosY = y;
@@ -171,8 +186,8 @@ public class Main extends Application {
 
                 root.getChildren().add(r);
 
-                if (modele.grille.plateau[x][y] instanceof CaseSymbole) {
-                    Symbole s = ((CaseSymbole) modele.grille.plateau[x][y]).symbole;
+                if (controleur.grille.plateau[x][y] instanceof CaseSymbole) {
+                    Symbole s = ((CaseSymbole) controleur.grille.plateau[x][y]).symbole;
                     if (s == Symbole.CARRE) {
                         Rectangle re = new Rectangle(100 / 2 - 20, 100 / 2 - 20, 40, 40);
                         re.setFill(Color.BLUE);
@@ -195,7 +210,7 @@ public class Main extends Application {
                         db.setContent(content);
                         event.consume();
 
-                        if (!modele.enfoncerClicGrille(clicPosY, clicPosX)) {
+                        if (!controleur.enfoncerClicGrille(clicPosY, clicPosX)) {
                             Toast.makeText(primaryStage, "Tout chemin doit\ncommencer sur un symbôle.", 1000, 200, 200);
                         }
                     }
@@ -204,7 +219,7 @@ public class Main extends Application {
                 root.setOnDragEntered(new EventHandler<DragEvent>() { // Quand le clic est maintenu
                     public void handle(DragEvent event) {
 
-                        if (!modele.parcoursGrille(clicPosY, clicPosX)) {
+                        if (!controleur.parcoursGrille(clicPosY, clicPosX)) {
                             Toast.makeText(primaryStage, "Impossible d'aller sur cette case.", 1000, 200, 200);
                         }
 
@@ -214,7 +229,7 @@ public class Main extends Application {
 
                 root.setOnDragDone(new EventHandler<DragEvent>() { // Clic relaché
                     public void handle(DragEvent event) {
-                        if (!modele.relacherClicGrille(clicPosY, clicPosX)) {
+                        if (!controleur.relacherClicGrille(clicPosY, clicPosX)) {
                             Toast.makeText(primaryStage, "Tout chemin doit finir sur un symbôle.", 1000, 200, 200);
                         }
                     }

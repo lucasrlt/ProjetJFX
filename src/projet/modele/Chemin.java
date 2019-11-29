@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * @author p1710505
  */
 public class Chemin {
-
     public ArrayList<Case> casesIntermediaires;
 
     public Chemin(Case caseDepart)
@@ -21,9 +20,9 @@ public class Chemin {
         casesIntermediaires.add(caseDepart);
     }
 
-    public Case caseFinale() { return casesIntermediaires.get(casesIntermediaires.size() - 1); }
+    public Case getDerniereCase() { return casesIntermediaires.get(casesIntermediaires.size() - 1); }
 
-    public void ajoutCaseChemin(Case caseActuelle) {
+    public void ajouterCase(Case caseActuelle) {
         casesIntermediaires.add(caseActuelle);
     }
 
@@ -85,5 +84,15 @@ public class Chemin {
         }
 
         return ligne;
+    }
+
+    public int getLongueur() { return casesIntermediaires.size(); }
+    public CaseSymbole getPremiereCase() { return ((CaseSymbole) casesIntermediaires.get(0)); }
+
+    public boolean estValide() {
+        return casesIntermediaires.size() > 2 &&
+                getDerniereCase() instanceof CaseSymbole &&
+                getPremiereCase().symbole == ((CaseSymbole) getDerniereCase()).symbole &&
+                !getPremiereCase().position.equals(getDerniereCase().position);
     }
 }
