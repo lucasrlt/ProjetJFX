@@ -48,15 +48,6 @@ public class Main extends Application {
         BorderPane border = new BorderPane();
         controleur = new Controleur();
 
-        if (controleur.grille.ecranRegles) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Règles");
-            alert.setHeaderText("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
-
-            alert.showAndWait();
-        }
-        controleur.grille.ecranRegles = false;
-
         final GridPane gPane = new GridPane();
         dessinerGrille(gPane, primaryStage);
 
@@ -112,6 +103,10 @@ public class Main extends Application {
         nouvellePartie.setTextFill(Color.MAROON);
         nouvellePartie.setTextAlignment(TextAlignment.CENTER);
 
+        Button ecranRegles = new Button("Règles");
+        ecranRegles.setTextFill(Color.MAROON);
+        ecranRegles.setTextAlignment(TextAlignment.CENTER);
+
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
             {
@@ -120,10 +115,23 @@ public class Main extends Application {
             }
         };
 
-        // when button is pressed
-        nouvellePartie.setOnAction(event);
-        bPane.add(nouvellePartie, 0, 0);
+        EventHandler<ActionEvent> regles = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)
+            {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Règles");
+                    alert.setHeaderText("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
 
+                    alert.showAndWait();
+            }
+
+        };
+
+        nouvellePartie.setOnAction(event);
+        ecranRegles.setOnAction(regles);
+
+        bPane.add(nouvellePartie, 0, 0);
+        bPane.add(ecranRegles,0,1);
         bPane.setAlignment(Pos.CENTER);
         border.setBottom(bPane);
 
