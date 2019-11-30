@@ -99,6 +99,7 @@ public class Main extends Application {
         Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
 
         final GridPane bPane = new GridPane();
+        final GridPane rPane = new GridPane();
         Button nouvellePartie = new Button("Nouvelle Partie");
         nouvellePartie.setTextFill(Color.MAROON);
         nouvellePartie.setTextAlignment(TextAlignment.CENTER);
@@ -130,12 +131,26 @@ public class Main extends Application {
         nouvellePartie.setOnAction(event);
         ecranRegles.setOnAction(regles);
 
+        Text affichage = new Text("Grille Drag&Drop");
+        affichage.setFont(Font.font("Verdana", 30));
+        affichage.setFill(Color.MAROON);
+
         bPane.add(nouvellePartie, 0, 0);
-        bPane.add(ecranRegles,0,1);
+        rPane.add(affichage,0,0);
+        rPane.add(ecranRegles,0,1);
+
+
         bPane.setAlignment(Pos.CENTER);
         border.setBottom(bPane);
+        rPane.setAlignment(Pos.CENTER);
+        border.setTop(rPane);
+
+
 
         border.setMargin(bPane, new Insets(20));
+        border.setMargin(rPane, new Insets(20));
+        border.setMargin(gPane, new Insets(50));
+
 
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);
