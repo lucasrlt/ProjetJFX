@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.input.*;
 import javafx.scene.shape.Rectangle;
 import javafx.application.Application;
@@ -27,13 +29,14 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 import projet.modele.*;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+
+import javax.swing.*;
 
 /**
  *
@@ -50,6 +53,8 @@ public class Main extends Application {
 
         final GridPane gPane = new GridPane();
         dessinerGrille(gPane, primaryStage);
+
+        afficherSlectionNiveau(gPane, primaryStage);
 
         controleur.addObserver(new Observer() {
             @Override
@@ -86,7 +91,20 @@ public class Main extends Application {
                     alert.setTitle("Victoire !");
                     alert.setHeaderText("Vous avez gagné !");
 
-                    alert.showAndWait();
+                    if (controleur.grille.nbNiveau == Niveau.nbNiveaux - 1) {
+                        alert.setContentText("Vous avez terminé tous les niveaux du jeu !\nVous pouvez:\n\t- Rejouer\n\t- Créer de nouveaux niveaux");
+                        alert.showAndWait();
+                        afficherSlectionNiveau(gPane, primaryStage);
+                    } else {
+                        alert.showAndWait();
+
+                        controleur.niveauSuivant();
+                        dessinerGrille(gPane, primaryStage);
+                        controleur.update();
+                    }
+
+
+
                 }
             }
 
@@ -99,13 +117,17 @@ public class Main extends Application {
         Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
 
         final GridPane bPane = new GridPane();
-        Button nouvellePartie = new Button("Nouvelle Partie");
+        Button nouvellePartie = new Button("Vider Grille");
         nouvellePartie.setTextFill(Color.MAROON);
         nouvellePartie.setTextAlignment(TextAlignment.CENTER);
 
         Button ecranRegles = new Button("Règles");
         ecranRegles.setTextFill(Color.MAROON);
         ecranRegles.setTextAlignment(TextAlignment.CENTER);
+
+        Button ecranSelectionNiveau = new Button("Changer Niveau");
+        ecranSelectionNiveau.setTextFill(Color.MAROON);
+        ecranSelectionNiveau.setTextAlignment(TextAlignment.CENTER);
 
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
@@ -119,18 +141,23 @@ public class Main extends Application {
             public void handle(ActionEvent e)
             {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Règles");
-                    alert.setHeaderText("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
+                alert.setTitle("Règles");
+                alert.setHeaderText("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
 
-                    alert.showAndWait();
+                alert.showAndWait();
             }
+        };
 
+        EventHandler<ActionEvent> changerNiveau = e -> {
+            afficherSlectionNiveau(gPane, primaryStage);
         };
 
         nouvellePartie.setOnAction(event);
         ecranRegles.setOnAction(regles);
+        ecranSelectionNiveau.setOnAction(changerNiveau);
 
         bPane.add(nouvellePartie, 0, 0);
+        bPane.add(ecranSelectionNiveau, 0, 2);
         bPane.add(ecranRegles,0,1);
         bPane.setAlignment(Pos.CENTER);
         border.setBottom(bPane);
@@ -140,6 +167,25 @@ public class Main extends Application {
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void afficherSlectionNiveau(GridPane gPane, Stage primaryStage) {
+        List<String> choices = new ArrayList<>();
+        for (int i = 0; i < Niveau.nbNiveaux; i++) {
+            choices.add("Niveau " + String.valueOf(i + 1));
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("Niveau 1", choices);
+        dialog.setTitle("Jeu Casse Tête");
+        dialog.setHeaderText("Bienvenue sur le jeu du casse tête !");
+        dialog.setContentText("Choisissez votre niveau: ");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            controleur.chargerNiveau(Integer.parseInt(result.get().split(" ")[1]) - 1);
+            dessinerGrille(gPane, primaryStage);
+            controleur.update();
+        }
     }
 
     private Node dessinerLigne(Ligne type) {

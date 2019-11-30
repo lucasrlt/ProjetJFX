@@ -12,7 +12,7 @@ public class Controleur extends Observable {
     public Controleur() {
         super();
 
-        grille = new Grille(3, 3);
+        grille = new Grille(4, 4);
         allowDrag = false;
     }
 
@@ -22,8 +22,8 @@ public class Controleur extends Observable {
         if (cheminCree) {
             System.out.println("Début du chemin : " + c + "-" + r);
             allowDrag = true;
-            setChanged();
-            notifyObservers();
+
+            this.update();
         } else {
             allowDrag = false;
         }
@@ -43,8 +43,7 @@ public class Controleur extends Observable {
                 success = false;
         }
 
-        setChanged();
-        notifyObservers();
+        this.update();
 
         return success;
     }
@@ -59,14 +58,28 @@ public class Controleur extends Observable {
                 return false;
         }
 
-        setChanged();
-        notifyObservers();
+        this.update();
 
         return true;
     }
+
     public void rejouer()
     {
         grille.initGrille();
+        this.update();
+    }
+
+    public void chargerNiveau(int niveau) {
+        if (niveau >= 0 && niveau < Niveau.nbNiveaux) {
+            grille.changerNiveau(niveau);
+        }
+    }
+
+    public void niveauSuivant() {
+        grille.changerNiveau(grille.nbNiveau != Niveau.nbNiveaux - 1 ? grille.nbNiveau + 1 : 0);
+    }
+
+    public void update() {
         setChanged();
         notifyObservers();
     }
