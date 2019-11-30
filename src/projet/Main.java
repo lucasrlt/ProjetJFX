@@ -8,6 +8,7 @@ package projet;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -46,7 +47,15 @@ public class Main extends Application {
 
         BorderPane border = new BorderPane();
         controleur = new Controleur();
-        // Text[][] tabText = new Text[modele.grille.dimX][modele.grille.dimY];
+
+        if (controleur.grille.ecranRegles) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Règles");
+            alert.setHeaderText("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
+
+            alert.showAndWait();
+        }
+        controleur.grille.ecranRegles = false;
 
         final GridPane gPane = new GridPane();
         dessinerGrille(gPane, primaryStage);
@@ -98,17 +107,6 @@ public class Main extends Application {
 
         Scene scene = new Scene(border, Color.LIGHTGOLDENRODYELLOW);
 
-        final GridPane rPane = new GridPane();
-        Text affichage = new Text(
-                "Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
-        affichage.setFont(Font.font("Verdana", 20));
-        affichage.setTextAlignment(TextAlignment.CENTER);
-        affichage.setFill(Color.MAROON);
-        rPane.add(affichage, 0, 0);
-
-        rPane.setAlignment(Pos.CENTER);
-        border.setTop(rPane);
-
         final GridPane bPane = new GridPane();
         Button nouvellePartie = new Button("Nouvelle Partie");
         nouvellePartie.setTextFill(Color.MAROON);
@@ -117,7 +115,6 @@ public class Main extends Application {
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
             {
-                System.out.println("TRUUUC");
                 controleur.rejouer();
                 dessinerGrille(gPane,primaryStage);
             }
@@ -129,6 +126,8 @@ public class Main extends Application {
 
         bPane.setAlignment(Pos.CENTER);
         border.setBottom(bPane);
+
+        border.setMargin(bPane, new Insets(20));
 
         primaryStage.setTitle("Casse-tête symboles");
         primaryStage.setScene(scene);

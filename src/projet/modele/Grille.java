@@ -21,6 +21,7 @@ public class Grille {
     public int dimY;
     public ArrayList<Chemin> chemins;
     public ArrayList<Pair<CaseSymbole, CaseSymbole>> pairesSymboles;
+    public boolean ecranRegles = true;
 
     public Grille(int dimX, int dimY) {
         this.dimX = dimX;
@@ -33,6 +34,8 @@ public class Grille {
     }
 
     public void initGrille() {
+        if(!ecranRegles)
+        {
         chemins.clear();
         for (int y = 0; y < dimY; y++) {
             for (int x = 0; x < dimX; x++) {
@@ -53,7 +56,7 @@ public class Grille {
         ));
         plateau[2][0] = pairesSymboles.get(1).getKey();
         plateau[2][2] = pairesSymboles.get(1).getValue();
-    }
+    }}
 
     public void clearChemin(Chemin chemin) {
         for (Case ca : chemin.casesIntermediaires) {
