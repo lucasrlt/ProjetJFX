@@ -33,6 +33,7 @@ public class Grille {
     }
 
     public void initGrille() {
+        chemins.clear();
         for (int y = 0; y < dimY; y++) {
             for (int x = 0; x < dimX; x++) {
                 plateau[x][y] = new Case(new Position(x, y));
