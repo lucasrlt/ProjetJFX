@@ -6,6 +6,7 @@
 package projet;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -110,9 +111,21 @@ public class Main extends Application {
 
         final GridPane bPane = new GridPane();
         Button nouvellePartie = new Button("Nouvelle Partie");
-        bPane.add(nouvellePartie, 0, 0);
         nouvellePartie.setTextFill(Color.MAROON);
         nouvellePartie.setTextAlignment(TextAlignment.CENTER);
+
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)
+            {
+                System.out.println("TRUUUC");
+                controleur.rejouer();
+                dessinerGrille(gPane,primaryStage);
+            }
+        };
+
+        // when button is pressed
+        nouvellePartie.setOnAction(event);
+        bPane.add(nouvellePartie, 0, 0);
 
         bPane.setAlignment(Pos.CENTER);
         border.setBottom(bPane);

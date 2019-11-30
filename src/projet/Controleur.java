@@ -64,5 +64,11 @@ public class Controleur extends Observable {
 
         return true;
     }
+    public void rejouer()
+    {
+        grille.initGrille();
+        setChanged();
+        notifyObservers();
+    }
 
 }
