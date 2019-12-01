@@ -111,7 +111,7 @@ public class Main extends Application {
         gPane.setAlignment(Pos.CENTER);
         border.setCenter(gPane);
 
-        Scene scene = new Scene(border, 800,800, Color.LIGHTGOLDENRODYELLOW);
+        Scene scene = new Scene(border, 600,800, Color.LIGHTGOLDENRODYELLOW);
 
         final GridPane bPane = new GridPane();
 
@@ -191,21 +191,19 @@ public class Main extends Application {
 
         bPane.add(nouvellePartie, 0, 0);
         rPane.add(affichage,0,0);
-        rPane.add(ecranRegles,0,1);
-
-        bPane.add(ecranSelectionNiveau, 0, 2);
-        bPane.add(ecranRegles,0,1);
-        bPane.add(trouverSolutionBtn, 0, 3);
-        bPane.setAlignment(Pos.CENTER);
+        bPane.add(ecranSelectionNiveau, 2, 0);
+        bPane.add(ecranRegles,1,0);
+        bPane.add(trouverSolutionBtn, 3, 0);
+        bPane.setAlignment(Pos.TOP_CENTER);
         border.setBottom(bPane);
         rPane.setAlignment(Pos.CENTER);
         border.setTop(rPane);
 
 
 
-        border.setMargin(bPane, new Insets(20));
+        border.setMargin(bPane, new Insets(10));
         border.setMargin(rPane, new Insets(20));
-        border.setMargin(gPane, new Insets(50));
+        border.setMargin(gPane, new Insets(20));
 
 
         primaryStage.setTitle("Casse-tête symboles");

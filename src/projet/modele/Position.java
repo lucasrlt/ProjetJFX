@@ -18,23 +18,6 @@ public class Position {
         this.y = _y;
     }
 
-    public int getPositionX()
-    {
-        return this.x;
-    }
-    public int getPositionY()
-    {
-        return this.y;
-    }
-    public void setPositionX(int x)
-    {
-        this.x = x;
-    }
-    public void setPositionY(int y)
-    {
-        this.y = y;
-    }
-
     @Override
     public String toString() {
         return "X: " + x + ", Y: " + y;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 
 public class Niveau {
-    public static int nbNiveaux = 3;
+    public static int nbNiveaux = 6;
 
     public int dimension;
     public ArrayList<Pair<CaseSymbole, CaseSymbole>> pairesSymboles;
@@ -25,9 +25,15 @@ public class Niveau {
             case 0:
                 return getNiveau1();
             case 1:
-                return getNiveau2();
+                return getNiveau1Bis();
             case 2:
+                return getNiveau2();
+            case 3:
+                return getNiveau2Bis();
+            case 4:
                 return getNiveau3();
+            case 5:
+                return getNiveau3Bis();
             default:
                 return getNiveau1();
         }
@@ -80,5 +86,50 @@ public class Niveau {
         ));
 
         return niveau3;
+    }
+
+    static Niveau getNiveau1Bis() {
+        Niveau niveau1Bis = new Niveau(3);
+
+        niveau1Bis.ajouterPaireSymbole(new Pair<>(
+                new CaseSymbole(new Position(0, 0), Symbole.CARRE),
+                new CaseSymbole(new Position(2, 0), Symbole.CARRE)
+        ));
+
+        return niveau1Bis;
+    }
+
+    static Niveau getNiveau2Bis() {
+        Niveau niveau2Bis = new Niveau(4);
+
+        niveau2Bis.ajouterPaireSymbole(new Pair<>(
+                new CaseSymbole(new Position(1, 2), Symbole.CARRE),
+                new CaseSymbole(new Position(2, 1), Symbole.CARRE)
+        ));
+
+        niveau2Bis.ajouterPaireSymbole(new Pair<CaseSymbole, CaseSymbole>(
+                new CaseSymbole(new Position(1, 1), Symbole.ROND),
+                new CaseSymbole(new Position(3, 3), Symbole.ROND)
+        ));
+        return niveau2Bis;
+    }
+
+    static Niveau getNiveau3Bis() {
+        Niveau niveau3Bis = new Niveau(5);
+
+        niveau3Bis.ajouterPaireSymbole(new Pair<>(
+                new CaseSymbole(new Position(1, 0), Symbole.CARRE),
+                new CaseSymbole(new Position(4, 0), Symbole.CARRE)
+        ));
+
+        niveau3Bis.ajouterPaireSymbole(new Pair<CaseSymbole, CaseSymbole>(
+                new CaseSymbole(new Position(1, 3), Symbole.TRIANGLE),
+                new CaseSymbole(new Position(4, 3), Symbole.TRIANGLE)
+        ));
+        niveau3Bis.ajouterPaireSymbole(new Pair<CaseSymbole, CaseSymbole>(
+                new CaseSymbole(new Position(0, 0), Symbole.ROND),
+                new CaseSymbole(new Position(4, 4), Symbole.ROND)
+        ));
+        return niveau3Bis;
     }
 }

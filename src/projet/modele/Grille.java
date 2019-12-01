@@ -35,10 +35,6 @@ public class Grille {
         this.initGrille();
     }
 
-    public Case getCase(Position pos) {
-        return plateau[pos.x][pos.y];
-    }
-
     public void changerNiveau(int niveau) {
         this.nbNiveau = niveau;
         initGrille();
@@ -81,20 +77,6 @@ public class Grille {
     public void clearChemins() {
         for (Chemin chemin : chemins) {
             clearChemin(chemin);
-        }
-    }
-
-    public void setChemins(ArrayList<Chemin> chemins) {
-        for (Chemin chemin : this.chemins) {
-            clearChemin(chemin);
-        }
-
-        this.chemins = chemins;
-
-        for (Chemin chemin : this.chemins) {
-            for (Case ca : chemin.casesIntermediaires) {
-                plateau[ca.position.x][ca.position.y] = ca;
-            }
         }
     }
 
@@ -172,14 +154,6 @@ public class Grille {
         }
 
         return true;
-    }
-
-    public void ajouterLigne(int x, int y) {
-        chemins.get(chemins.size() - 1).ajouterCase(plateau[x][y]);
-    }
-
-    public void finChemin(int x, int y) {
-        chemins.get(chemins.size() - 1).ajouterCase(plateau[x][y]);
     }
 
     public boolean creerLignePourCase(int x, int y) {
