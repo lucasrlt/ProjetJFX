@@ -7,6 +7,7 @@ package projet.modele;
 
 import javafx.util.Pair;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
@@ -20,39 +21,46 @@ public class Grille {
     public int dimX;
     public int dimY;
     public ArrayList<Chemin> chemins;
-    public ArrayList<Pair<CaseSymbole, CaseSymbole>> pairesSymboles;
+    public int nbNiveau;
 
     public Grille(int dimX, int dimY) {
         this.dimX = dimX;
         this.dimY = dimY;
         this.plateau = new Case[this.dimX][this.dimY];
         this.chemins = new ArrayList<Chemin>();
-        this.pairesSymboles = new ArrayList<Pair<CaseSymbole, CaseSymbole>>();
+
+        this.nbNiveau = 0;
 
         this.initGrille();
     }
 
+    public void changerNiveau(int niveau) {
+        this.nbNiveau = niveau;
+        initGrille();
+    }
+
     public void initGrille() {
         chemins.clear();
+
+        Niveau n = Niveau.getNiveau(this.nbNiveau);
+        this.dimX = n.dimension;
+        this.dimY = n .dimension;
+
+        this.plateau = new Case[this.dimX][this.dimY];
         for (int y = 0; y < dimY; y++) {
             for (int x = 0; x < dimX; x++) {
                 plateau[x][y] = new Case(new Position(x, y));
             }
         }
 
-        pairesSymboles.add(new Pair<CaseSymbole, CaseSymbole>(
-                new CaseSymbole(new Position(0, 0), Symbole.CARRE),
-                new CaseSymbole(new Position(1, 2), Symbole.CARRE)
-                ));
-        plateau[0][0] = pairesSymboles.get(0).getKey();
-        plateau[1][2] = pairesSymboles.get(0).getValue();
+        CaseSymbole depart, arrivee;
+        for (Pair<CaseSymbole, CaseSymbole> paireSymboles : n.pairesSymboles) {
+            depart = paireSymboles.getKey();
+            arrivee = paireSymboles.getValue();
 
-        pairesSymboles.add(new Pair<CaseSymbole, CaseSymbole>(
-                new CaseSymbole(new Position(2, 0), Symbole.ROND),
-                new CaseSymbole(new Position(2, 2), Symbole.ROND)
-        ));
-        plateau[2][0] = pairesSymboles.get(1).getKey();
-        plateau[2][2] = pairesSymboles.get(1).getValue();
+            plateau[depart.position.x][depart.position.y] = depart;
+            plateau[arrivee.position.x][arrivee.position.y] = arrivee;
+        }
     }
 
     public void clearChemin(Chemin chemin) {
@@ -66,7 +74,7 @@ public class Grille {
 
     public boolean verifierVictoire() {
         Optional<Chemin> cheminPourSymbole;
-        for (Pair<CaseSymbole, CaseSymbole> paireSymbole : pairesSymboles) {
+        for (Pair<CaseSymbole, CaseSymbole> paireSymbole : Niveau.getNiveau(nbNiveau).pairesSymboles) {
             cheminPourSymbole = trouverCheminPourSymbole(paireSymbole.getKey().symbole);
             if (!cheminPourSymbole.isPresent() || !cheminPourSymbole.get().estValide())
                 return false;
