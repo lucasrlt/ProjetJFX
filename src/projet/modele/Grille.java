@@ -21,6 +21,7 @@ public class Grille {
     public int dimX;
     public int dimY;
     public ArrayList<Chemin> chemins;
+    public ArrayList<Pair<CaseSymbole, CaseSymbole>> pairesSymboles;
     public int nbNiveau;
 
     public Grille(int dimX, int dimY) {
@@ -29,9 +30,13 @@ public class Grille {
         this.plateau = new Case[this.dimX][this.dimY];
         this.chemins = new ArrayList<Chemin>();
 
-        this.nbNiveau = 0;
+        this.nbNiveau = 1;
 
         this.initGrille();
+    }
+
+    public Case getCase(Position pos) {
+        return plateau[pos.x][pos.y];
     }
 
     public void changerNiveau(int niveau) {
@@ -45,6 +50,7 @@ public class Grille {
         Niveau n = Niveau.getNiveau(this.nbNiveau);
         this.dimX = n.dimension;
         this.dimY = n .dimension;
+        this.pairesSymboles = n.pairesSymboles;
 
         this.plateau = new Case[this.dimX][this.dimY];
         for (int y = 0; y < dimY; y++) {
@@ -70,6 +76,26 @@ public class Grille {
         }
 
         chemins.remove(chemin);
+    }
+
+    public void clearChemins() {
+        for (Chemin chemin : chemins) {
+            clearChemin(chemin);
+        }
+    }
+
+    public void setChemins(ArrayList<Chemin> chemins) {
+        for (Chemin chemin : this.chemins) {
+            clearChemin(chemin);
+        }
+
+        this.chemins = chemins;
+
+        for (Chemin chemin : this.chemins) {
+            for (Case ca : chemin.casesIntermediaires) {
+                plateau[ca.position.x][ca.position.y] = ca;
+            }
+        }
     }
 
     public boolean verifierVictoire() {

@@ -5,6 +5,7 @@
  */
 package projet;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,14 +17,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.input.*;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -32,9 +32,6 @@ import javafx.stage.Stage;
 import java.util.*;
 
 import projet.modele.*;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 
 import javax.swing.*;
 
@@ -86,13 +83,13 @@ public class Main extends Application {
                     }
                 }
 
-                if (controleur.grille.verifierVictoire()) {
+                if (controleur.grille.verifierVictoire() && !controleur.demandeSolution) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Victoire !");
                     alert.setHeaderText("Vous avez gagné !");
 
                     if (controleur.grille.nbNiveau == Niveau.nbNiveaux - 1) {
-                        alert.setContentText("Vous avez terminé tous les niveaux du jeu !\nVous pouvez:\n\t- Rejouer\n\t- Créer de nouveaux niveaux");
+                        alert.setContentText("Vous avez terminé tous les niveaux du jeu !\nVous pouvez:\n\t- Rejouer");
                         alert.showAndWait();
                         afficherSlectionNiveau(gPane, primaryStage);
                     } else {
@@ -132,6 +129,11 @@ public class Main extends Application {
         ecranSelectionNiveau.setTextFill(Color.MAROON);
         ecranSelectionNiveau.setTextAlignment(TextAlignment.CENTER);
 
+        Button trouverSolutionBtn = new Button("Afficher Solution");
+        trouverSolutionBtn.setTextFill(Color.MAROON);
+        trouverSolutionBtn.setTextAlignment(TextAlignment.CENTER);
+
+
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
             {
@@ -155,9 +157,33 @@ public class Main extends Application {
             afficherSlectionNiveau(gPane, primaryStage);
         };
 
+        EventHandler<ActionEvent> trouverSolution = e -> {
+            Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+            alert1.setTitle("Solution");
+            alert1.setHeaderText("Recherche de la solution");
+            alert1.setContentText("Cela peut prendre un peu de temps...");
+
+            alert1.show();
+
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    if(!controleur.trouverSolution()) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Aucune solution");
+                        alert.setHeaderText("Ce problème semble ne pas avoir de solution.");
+
+                        alert.showAndWait();
+                    }
+                    alert1.close();
+                }
+            });
+
+        };
+
         nouvellePartie.setOnAction(event);
         ecranRegles.setOnAction(regles);
         ecranSelectionNiveau.setOnAction(changerNiveau);
+        trouverSolutionBtn.setOnAction(trouverSolution);
 
         Text affichage = new Text("Grille Drag&Drop");
         affichage.setFont(Font.font("Verdana", 30));
@@ -169,6 +195,7 @@ public class Main extends Application {
 
         bPane.add(ecranSelectionNiveau, 0, 2);
         bPane.add(ecranRegles,0,1);
+        bPane.add(trouverSolutionBtn, 0, 3);
         bPane.setAlignment(Pos.CENTER);
         border.setBottom(bPane);
         rPane.setAlignment(Pos.CENTER);
@@ -279,6 +306,14 @@ public class Main extends Application {
                     if (s == Symbole.ROND) {
                         Circle re = new Circle(50, 50, 20);
                         re.setFill(Color.BLACK);
+                        root.getChildren().add(re);
+                    }
+                    if (s == Symbole.TRIANGLE) {
+                        Polygon re = new Polygon();
+                        re.getPoints().addAll(50.0, 20.0,
+                                20.0, 80.0,
+                                80.0, 80.0);
+                        re.setFill(Color.RED);
                         root.getChildren().add(re);
                     }
 

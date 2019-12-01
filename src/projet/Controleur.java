@@ -7,6 +7,7 @@ import java.util.Observable;
 public class Controleur extends Observable {
     int lastC, lastR;
     public Grille grille;
+    boolean demandeSolution;
     boolean allowDrag;
 
     public Controleur() {
@@ -14,9 +15,11 @@ public class Controleur extends Observable {
 
         grille = new Grille(4, 4);
         allowDrag = false;
+        demandeSolution = false;
     }
 
     public boolean enfoncerClicGrille(int r, int c) {
+        demandeSolution = false;
         boolean cheminCree = grille.nouveauChemin(c, r);
 
         if (cheminCree) {
@@ -63,8 +66,21 @@ public class Controleur extends Observable {
         return true;
     }
 
+    public boolean trouverSolution() {
+        Solveur g = new Solveur(grille);
+
+        if(g.trouverSolution()) {
+            demandeSolution = true;
+            update();
+            return true;
+        }
+
+        return false;
+    }
+
     public void rejouer()
     {
+        demandeSolution = false;
         grille.initGrille();
         this.update();
     }
