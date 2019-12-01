@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 
 public class Niveau {
-    public static int nbNiveaux = 2;
+    public static int nbNiveaux = 3;
 
     public int dimension;
     public ArrayList<Pair<CaseSymbole, CaseSymbole>> pairesSymboles;
@@ -26,6 +26,8 @@ public class Niveau {
                 return getNiveau1();
             case 1:
                 return getNiveau2();
+            case 2:
+                return getNiveau3();
             default:
                 return getNiveau1();
         }
@@ -59,6 +61,24 @@ public class Niveau {
         ));
 
         return niveau2;
+    }
 
+    static Niveau getNiveau3() {
+        Niveau niveau3 = new Niveau(5);
+
+        niveau3.ajouterPaireSymbole(new Pair<>(
+                new CaseSymbole(new Position(0, 0), Symbole.CARRE),
+                new CaseSymbole(new Position(0, 4), Symbole.CARRE)
+        ));
+        niveau3.ajouterPaireSymbole(new Pair<>(
+                new CaseSymbole(new Position(4, 0), Symbole.ROND),
+                new CaseSymbole(new Position(1, 4), Symbole.ROND)
+        ));
+        niveau3.ajouterPaireSymbole(new Pair<>(
+                new CaseSymbole(new Position(1, 0), Symbole.TRIANGLE),
+                new CaseSymbole(new Position(3, 3), Symbole.TRIANGLE)
+        ));
+
+        return niveau3;
     }
 }
