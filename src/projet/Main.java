@@ -111,7 +111,7 @@ public class Main extends Application {
         gPane.setAlignment(Pos.CENTER);
         border.setCenter(gPane);
 
-        Scene scene = new Scene(border, 600,800, Color.LIGHTGOLDENRODYELLOW);
+        Scene scene = new Scene(border, 600,700, Color.LIGHTGOLDENRODYELLOW);
 
         final GridPane bPane = new GridPane();
 
@@ -147,8 +147,8 @@ public class Main extends Application {
             {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Règles");
-                alert.setHeaderText("Ensemble de règles :\n - Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
-
+                alert.setHeaderText("Ensemble de règles :");
+                alert.setContentText("- Pour gagner, il suffit de relier les paires de symboles entres elles\n - De plus, vous devez remplir toutes les cases de la grille qui ne\n sont pas des symboles par une ligne\n- Vous ne pouvez pas repasser sur une case contenant une ligne");
                 alert.showAndWait();
             }
         };
@@ -185,7 +185,7 @@ public class Main extends Application {
         ecranSelectionNiveau.setOnAction(changerNiveau);
         trouverSolutionBtn.setOnAction(trouverSolution);
 
-        Text affichage = new Text("Grille Drag&Drop");
+        Text affichage = new Text("Casse-tête symboles");
         affichage.setFont(Font.font("Verdana", 30));
         affichage.setFill(Color.MAROON);
 

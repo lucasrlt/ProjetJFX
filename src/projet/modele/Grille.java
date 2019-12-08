@@ -117,8 +117,6 @@ public class Grille {
 
     public boolean nouveauChemin(int x, int y) {
         if (plateau[x][y] instanceof CaseSymbole) {
-            CaseSymbole caseVisee = (CaseSymbole) plateau[x][y];
-            int id = -1;
 
             Optional<Chemin> cheminExistant = trouverCheminPourSymbole(((CaseSymbole) plateau[x][y]).symbole);
             if (cheminExistant.isPresent())
