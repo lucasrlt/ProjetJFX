@@ -5,10 +5,10 @@ import projet.modele.*;
 import java.util.Observable;
 
 public class Controleur extends Observable {
-    int lastC, lastR;
+    private int lastC, lastR;
     public Grille grille;
     boolean demandeSolution;
-    boolean allowDrag;
+    private boolean allowDrag;
 
     public Controleur() {
         super();
@@ -23,7 +23,6 @@ public class Controleur extends Observable {
         boolean cheminCree = grille.nouveauChemin(c, r);
 
         if (cheminCree) {
-            System.out.println("Début du chemin : " + c + "-" + r);
             allowDrag = true;
 
             this.update();
@@ -38,8 +37,6 @@ public class Controleur extends Observable {
         boolean success = true;
 
         if (allowDrag) {
-            System.out.println("Fin chemin : " + c + "-" + r + " -> " + lastC + "-" + lastR);
-
             allowDrag = false;
 
             if (!grille.terminerChemin(lastC, lastR))
@@ -55,8 +52,6 @@ public class Controleur extends Observable {
         if (allowDrag) {
             lastC = c;
             lastR = r;
-            System.out.println("Case que vous pointez : " + c + "-" + r);
-
             if (!grille.creerLignePourCase(c, r))
                 return false;
         }

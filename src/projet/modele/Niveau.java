@@ -39,7 +39,7 @@ public class Niveau {
         }
     }
 
-    static Niveau getNiveau1() {
+    private static Niveau getNiveau1() {
         Niveau niveau1 = new Niveau(3);
 
         niveau1.ajouterPaireSymbole(new Pair<>(
@@ -54,7 +54,7 @@ public class Niveau {
         return niveau1;
     }
 
-    static Niveau getNiveau2() {
+    private static Niveau getNiveau2() {
         Niveau niveau2 = new Niveau(4);
 
         niveau2.ajouterPaireSymbole(new Pair<CaseSymbole, CaseSymbole>(
@@ -69,7 +69,7 @@ public class Niveau {
         return niveau2;
     }
 
-    static Niveau getNiveau3() {
+    private static Niveau getNiveau3() {
         Niveau niveau3 = new Niveau(5);
 
         niveau3.ajouterPaireSymbole(new Pair<>(
@@ -88,7 +88,7 @@ public class Niveau {
         return niveau3;
     }
 
-    static Niveau getNiveau1Bis() {
+    private static Niveau getNiveau1Bis() {
         Niveau niveau1Bis = new Niveau(3);
 
         niveau1Bis.ajouterPaireSymbole(new Pair<>(
@@ -99,7 +99,7 @@ public class Niveau {
         return niveau1Bis;
     }
 
-    static Niveau getNiveau2Bis() {
+    private static Niveau getNiveau2Bis() {
         Niveau niveau2Bis = new Niveau(4);
 
         niveau2Bis.ajouterPaireSymbole(new Pair<>(
@@ -114,7 +114,7 @@ public class Niveau {
         return niveau2Bis;
     }
 
-    static Niveau getNiveau3Bis() {
+    private static Niveau getNiveau3Bis() {
         Niveau niveau3Bis = new Niveau(5);
 
         niveau3Bis.ajouterPaireSymbole(new Pair<>(

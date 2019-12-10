@@ -26,7 +26,7 @@ public class Solveur {
         construireLiensPourGrille();
     }
 
-    public void ajouterLien(int debut, int fin) {
+    private void ajouterLien(int debut, int fin) {
         noeuxAdjacents[debut].add(fin);
     }
 
@@ -104,7 +104,7 @@ public class Solveur {
     }
 
 
-    public ArrayList<ArrayList<Integer>> trouverCheminsPossibles(int debut, int fin, ArrayList<Integer> noeuxIgnores) {
+    private ArrayList<ArrayList<Integer>> trouverCheminsPossibles(int debut, int fin, ArrayList<Integer> noeuxIgnores) {
         boolean[] estVisite = new boolean[nbNoeux];
         for (Integer noeu : noeuxIgnores) {
             estVisite[noeu] = true;
@@ -121,7 +121,7 @@ public class Solveur {
         return new ArrayList<>(this.cheminsValides);
     }
 
-    private <Integer> ArrayList<ArrayList<ArrayList<Integer>>> calculate(ArrayList<ArrayList<ArrayList<Integer>>> input) {
+    private <Integer> ArrayList<ArrayList<ArrayList<Integer>>> trouverCombinaisons(ArrayList<ArrayList<ArrayList<Integer>>> input) {
         ArrayList<ArrayList<ArrayList<Integer>>> result= new ArrayList<>();
 
         if (input.isEmpty()) {  // If input a empty list
@@ -129,7 +129,7 @@ public class Solveur {
             return result;
         } else {
             ArrayList<ArrayList<Integer>> head = input.get(0);//get the first list as a head
-            ArrayList<ArrayList<ArrayList<Integer>>> tail = calculate(new ArrayList<ArrayList<ArrayList<Integer>>> (input.subList(1, input.size())));//recursion to calculate a tail list
+            ArrayList<ArrayList<ArrayList<Integer>>> tail = trouverCombinaisons(new ArrayList<ArrayList<ArrayList<Integer>>> (input.subList(1, input.size())));//recursion to calculate a tail list
             for (ArrayList<Integer> h : head) {//we merge every head element with every tail list.
                 for (ArrayList<ArrayList<Integer>> t : tail) {
                     ArrayList<ArrayList<Integer>> resultElement = new ArrayList<>();
@@ -142,11 +142,11 @@ public class Solveur {
         return result;
     }
 
-    public int positionVersNoeu(Position p) {
+    private int positionVersNoeu(Position p) {
         return p.y * largeur + p.x;
     }
 
-    public Position noeuVersPosition(int noeu) {
+    private Position noeuVersPosition(int noeu) {
         return new Position(
                 noeu % largeur,
                 noeu / largeur
@@ -171,7 +171,7 @@ public class Solveur {
             ignores.clear();
         }
 
-        ArrayList<ArrayList<ArrayList<Integer>>> combinaisons = calculate(tousChemins);
+        ArrayList<ArrayList<ArrayList<Integer>>> combinaisons = trouverCombinaisons(tousChemins);
         for (ArrayList<ArrayList<Integer>> combinaison : combinaisons) {
             if (!cheminsSeCroisent(combinaison) && cheminsParcourentTousNoeux(combinaison)) {
                 grille.clearChemins();

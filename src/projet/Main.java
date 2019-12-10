@@ -40,7 +40,7 @@ import javax.swing.*;
  * @author p1710505
  */
 public class Main extends Application {
-    Controleur controleur;
+    private Controleur controleur;
 
     @Override
     public void start(final Stage primaryStage) {

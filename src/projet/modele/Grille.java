@@ -65,7 +65,7 @@ public class Grille {
         }
     }
 
-    public void clearChemin(Chemin chemin) {
+    private void clearChemin(Chemin chemin) {
         for (Case ca : chemin.casesIntermediaires) {
             if (ca instanceof CaseLigne)
                 plateau[ca.position.x][ca.position.y] = new Case(ca.position);
@@ -98,7 +98,7 @@ public class Grille {
         return true;
     }
 
-    public Chemin dernierChemin() {
+    private Chemin dernierChemin() {
         return chemins.get(chemins.size() - 1);
     }
 
